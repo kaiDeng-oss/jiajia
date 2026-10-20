@@ -35,12 +35,24 @@
 └── 嘉嘉盒子-产品化部署手册.doc
 ```
 
+## 开箱即用程度
+
+本仓库只包含**代码**。克隆后还需要完成以下 4 步才能运行：
+
+1. 安装 Python 依赖和 **ffmpeg**（服务端启动时会检查，缺失直接报错）
+2. 下载 **ASR 模型**（约 228 MB，开源免费）
+3. 创建 `data\.config.yaml` 并填写 **LLM API Key**
+4. 填写 **TTS 音色配置**（火山引擎 appid / access_token / 音色 ID，或改用免费的 EdgeTTS）
+
+密钥和音色不会随仓库分发，每个使用者需要用自己的账号。
+
 ## 快速开始（Windows）
 
 ### 1. 环境要求
 
 - Python 3.10 / 3.11
 - Windows 10/11
+- [ffmpeg](https://ffmpeg.org/download.html)（需加入 PATH，可用 `winget install Gyan.FFmpeg` 安装）
 
 ### 2. 创建虚拟环境并安装依赖
 
@@ -53,13 +65,17 @@ pip install -r xiaozhi-ui\wakeword_runtime\requirements.txt
 
 ### 3. 准备语音模型
 
-仓库不包含体积较大的 ASR 模型（单文件数百 MB），请按上游文档下载后放到：
+仓库不包含体积较大的 ASR 模型。以本项目默认使用的 Sherpa 模型为例：
+
+从 [sherpa-onnx asr-models](https://github.com/k2-fsa/sherpa-onnx/releases/tag/asr-models) 下载
+`sherpa-onnx-sense-voice-zh-en-ja-ko-yue-2024-07-17.tar.bz2`，解压到：
 
 ```
 xiaozhi-esp32-server-main\main\xiaozhi-server\models\
+└── sherpa-onnx-sense-voice-zh-en-ja-ko-yue-2024-07-17\
 ```
 
-唤醒词模型（约 5 MB）已包含在 `xiaozhi-ui\wakeword_runtime\models\` 中。
+唤醒词模型（约 5 MB）已包含在 `xiaozhi-ui\wakeword_runtime\models\` 中，无需另外下载。
 
 ### 4. 配置
 
@@ -70,8 +86,10 @@ copy xiaozhi-esp32-server-main\main\xiaozhi-server\config.yaml ^
 
 然后在 `data\.config.yaml` 中填写你自己的：
 
-- LLM API Key（如 DeepSeek）
-- 火山引擎语音合成 `appid` / `access_token`
+- `selected_module`：选择要用的 ASR / LLM / TTS（模板默认 FunASR + ChatGLM + EdgeTTS）
+- **LLM API Key**：如 DeepSeek（付费）或 ChatGLM（有免费额度）
+- **TTS 音色**：使用火山引擎时需要 `appid`、`access_token` 和音色 ID，音色绑定在各自账号下；
+  想零成本可用模板默认的 **EdgeTTS**（无需 Key，音色选项不同）
 - MCP 接入点（可选）
 
 > `data\.config.yaml` 已被 `.gitignore` 排除，不会被提交。
