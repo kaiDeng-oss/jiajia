@@ -1,0 +1,47 @@
+# ========== Python 运行环境 ==========
+venv-xiaozhi/
+.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ========== 体积过大的依赖 / 产物 ==========
+/tools/
+/xiaozhi-server.zip
+xiaozhi-esp32-server-main/main/xiaozhi-server/models/
+xiaozhi-esp32-server-main/main/xiaozhi-server/data/
+xiaozhi-esp32-server-main/main/xiaozhi-server/tmp/
+xiaozhi-esp32-server-main/main/digital-human/wakeword_runtime/models/
+xiaozhi-esp32-server-main/main/manager-web/node_modules/
+xiaozhi-esp32-server-main/main/manager-mobile/node_modules/
+
+# ========== 日志 / 运行状态 ==========
+logs/
+*.log
+*.log.*
+*.err.txt
+*.out.txt
+.supervisor.pid
+
+# ========== 本地备份 / 临时文件 / 旧副本 ==========
+/Project/
+/tmp/
+/backup-20260819/
+/xiaozhi-jiajia-github/
+/.media_cache/
+/.claude/
+
+# ========== 个人数据（不公开） ==========
+/照片/
+/data/
+/portproxy-on.ps1
+/portproxy-off.ps1
+
+# ========== 敏感配置 ==========
+.env
+.env.*
+*.secret
+.config.yaml
+.config.yaml.bak*
+.private_config.yaml
+config.local.*

@@ -1,0 +1,187 @@
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+<meta charset="utf-8">
+<title>嘉嘉 AI 语音助手使用说明</title>
+<!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View><w:Zoom>100</w:Zoom></w:WordDocument></xml><![endif]-->
+<style>
+  @page { size: 595.3pt 841.9pt; margin: 72pt 90pt; }
+  body { font-family: "微软雅黑", "Microsoft YaHei", sans-serif; font-size: 11pt; color: #333333; line-height: 1.7; }
+  h1 { font-size: 22pt; color: #d6457e; text-align: center; margin: 18pt 0 6pt 0; }
+  h2 { font-size: 15pt; color: #d6457e; border-bottom: 1.5pt solid #ffc1d5; padding-bottom: 4pt; margin: 18pt 0 8pt 0; }
+  h3 { font-size: 12.5pt; color: #c0396b; margin: 12pt 0 6pt 0; }
+  p { margin: 6pt 0; }
+  table { border-collapse: collapse; width: 100%; margin: 8pt 0; }
+  th { background: #ffe4ec; color: #b0386a; font-weight: bold; }
+  th, td { border: 0.75pt solid #dda8bd; padding: 6pt 8pt; font-size: 10.5pt; }
+  .center { text-align: center; }
+  .subtitle { text-align: center; color: #b8939f; font-size: 11pt; margin-bottom: 24pt; }
+  .box { background: #fff8fa; border: 0.75pt solid #ffc1d5; padding: 8pt 12pt; margin: 8pt 0; }
+  code { font-family: Consolas, "Courier New", monospace; background: #fff0f5; color: #c0396b; padding: 1pt 4pt; font-size: 10pt; }
+  .tip { color: #2e7d32; }
+  .warn { color: #c62828; }
+</style>
+</head>
+<body>
+
+<h1>嘉嘉 AI 语音助手使用说明</h1>
+<p class="subtitle">你的贴心 AI 小女友 · 本地部署 · DeepSeek 驱动 · 女声音色 · 唤醒词"嘉嘉"</p>
+
+<h2>一、产品简介</h2>
+<p><b>嘉嘉</b>是一款部署在你电脑上的 AI 语音助手，由开源小智AI（xiaozhi-esp32-server）构建，具备以下核心能力：</p>
+<table>
+  <tr><th width="22%">能力</th><th>说明</th></tr>
+  <tr><td>自然语音对话</td><td>直接说话即可与嘉嘉聊天，语音识别 → 大模型思考 → 女声回答，全自动流程</td></tr>
+  <tr><td>DeepSeek 大模型</td><td>对话由 DeepSeek 大模型驱动（云服务，效果出色，中文能力强）</td></tr>
+  <tr><td>语音唤醒</td><td>喊一声<b>"嘉嘉"</b>即可唤醒对话，无需点击任何按钮</td></tr>
+  <tr><td>女性音色</td><td>默认活泼女声"晓伊"，可自由更换多种免费女声（晓晓、晓涵、晓梦等）</td></tr>
+  <tr><td>文字聊天</td><td>支持打字输入，不方便说话时也能正常交流</td></tr>
+  <tr><td>钢铁侠虚拟体</td><td>网页上显示 3D 钢铁侠机甲，嘉嘉说话时胸口反应堆脉冲发光，支持鼠标拖拽旋转</td></tr>
+  <tr><td>女友陪伴人设</td><td>温柔、贴心、会撒娇的虚拟女友形象，时刻陪伴</td></tr>
+</table>
+
+<h2>二、快速开始</h2>
+<h3>2.1 启动系统</h3>
+<div class="box">
+  <p><b>双击桌面上的 <code>start.bat</code></b>（位于 <code>D:\Project\start.bat</code>）</p>
+  <p>脚本会自动完成三件事：</p>
+  <p>① 启动嘉嘉服务器（端口 8000/8003）</p>
+  <p>② 启动唤醒词服务（端口 8006，监听"嘉嘉"）</p>
+  <p>③ 自动打开使用页面 <code>http://127.0.0.1:8006/index.html</code></p>
+</div>
+
+<h3>2.2 开始对话</h3>
+<p>1. 页面打开后，点击粉色大按钮<b>"呼叫嘉嘉"</b>，等待连接成功（右上角状态变为"已连接"绿色圆点）；</p>
+<p>2. 连接成功后自动开始聆听，直接说话即可，例如：<i>"嘉嘉，今天过得怎么样？"</i></p>
+<p>3. 说完停顿约 1 秒，嘉嘉会自动回答（钢铁侠胸口同时发光），说完继续聆听下一句。</p>
+<p class="tip">💡 全程无需按键，像打电话一样自然对话。</p>
+
+<h2>三、功能介绍</h2>
+<h3>3.1 语音对话（免按键）</h3>
+<p>连接后系统自动开启麦克风监听：</p>
+<table>
+  <tr><th width="30%">流程</th><th>说明</th></tr>
+  <tr><td>采集声音</td><td>麦克风采集 → 压缩为 Opus 音频实时推送给服务器</td></tr>
+  <tr><td>语音识别</td><td>服务器本地 ASR（sherpa-onnx，SenseVoice 模型）将语音转为文字（完全离线）</td></tr>
+  <tr><td>大模型回复</td><td>DeepSeek 根据"嘉嘉"人设生成温柔回复</td></tr>
+  <tr><td>语音合成</td><td>女声 TTS（edge-tts）将回复朗读出来并播放</td></tr>
+</table>
+<p>说话时底部"录音"按钮会变为粉红色脉动状态（表示正在聆听）。如想暂停对话，点一下"录音"按钮关闭麦克风，再点一下恢复。</p>
+
+<h3>3.2 文字聊天</h3>
+<p>连接成功后，聊天区底部会出现文字输入框，输入内容按 <b>Enter</b> 发送。嘉嘉的回答同时以文字气泡显示在聊天区。</p>
+
+<h3>3.3 语音唤醒"嘉嘉"</h3>
+<p>唤醒词服务（8006 端口）持续监听麦克风：</p>
+<ul>
+  <li>听到你说<b>"嘉嘉"</b>，自动触发呼叫并开始对话；</li>
+  <li>唤醒词在设置 → 唤醒词 中可查看/修改（支持多词，一行一个）；</li>
+  <li>点击"应用唤醒词"按钮即时生效（唤醒词服务会自动转换拼音模型）。</li>
+</ul>
+
+<h3>3.4 钢铁侠虚拟体</h3>
+<ul>
+  <li>位于页面左侧，Three.js 实时渲染的 3D 钢铁侠机甲；</li>
+  <li><b>鼠标拖拽</b>：任意角度旋转查看；</li>
+  <li>嘉嘉说话时：胸口反应堆变亮脉冲（蓝色光晕）；</li>
+  <li>面板底部显示状态：待机 / 聆听中 / 讲话中。</li>
+</ul>
+
+<h3>3.5 手机访问（同一 WiFi）</h3>
+<p>手机与电脑连同一 WiFi，浏览器访问电脑局域网地址：</p>
+<div class="box"><p class="center"><code>http://192.168.10.52:8006</code></p></div>
+<p>（IP 以服务器启动日志为准；也可在 Windows 命令行运行 <code>ipconfig</code> 查看本机 IPV4 地址）</p>
+
+<h2>四、界面说明</h2>
+<table>
+  <tr><th width="30%">区域</th><th>说明</th></tr>
+  <tr><td>顶部信息栏</td><td>嘉嘉头像、昵称、连接状态（离线/已连接）</td></tr>
+  <tr><td>左侧钢铁侠面板</td><td>3D 虚拟体展示区，可拖拽旋转</td></tr>
+  <tr><td>中间聊天区</td><td>对话气泡流（左侧白色=嘉嘉，右侧粉色=你）+ 音频可视化条 + 文字输入框</td></tr>
+  <tr><td>底部控制栏</td><td>设置按钮 / 呼叫嘉嘉（连接、挂断）/ 录音（麦克风开关）</td></tr>
+  <tr><td>设置弹窗</td><td>齿轮图标打开，含设备配置、唤醒词、其他三个标签页</td></tr>
+</table>
+
+<h2>五、设置详解</h2>
+<h3>5.1 设备配置</h3>
+<table>
+  <tr><th width="26%">项目</th><th>默认值</th><th>说明</th></tr>
+  <tr><td>设备MAC</td><td>自动生成</td><td>设备唯一标识，一般无需修改</td></tr>
+  <tr><td>客户端ID</td><td>web_test_client</td><td>客户端标识</td></tr>
+  <tr><td>设备名称</td><td>嘉嘉的设备</td><td>在服务器端显示的设备名</td></tr>
+  <tr><td>情绪表情</td><td>禁用</td><td>是否启用表情包功能</td></tr>
+  <tr><td>服务器地址</td><td>http://127.0.0.1:8003/xiaozhi/ota/</td><td>嘉嘉服务器 OTA 接口地址（本机部署无需修改）</td></tr>
+</table>
+
+<h3>5.2 唤醒词设置</h3>
+<table>
+  <tr><th width="26%">项目</th><th>默认值</th><th>说明</th></tr>
+  <tr><td>启用本地唤醒词</td><td>启用</td><td>关闭后不再监听"嘉嘉"</td></tr>
+  <tr><td>唤醒词服务地址</td><td>ws://127.0.0.1:8006/wakeword-ws</td><td>本地唤醒词服务（一般无需修改）</td></tr>
+  <tr><td>唤醒词配置</td><td>嘉嘉</td><td>一行一个唤醒词，修改后点"应用唤醒词"生效</td></tr>
+</table>
+
+<h3>5.3 其他</h3>
+<p><b>切换背景</b>：循环切换粉色渐变背景图。</p>
+
+<h2>六、音色管理</h2>
+<h3>6.1 可选女声音色（免费）</h3>
+<table>
+  <tr><th width="28%">音色 ID</th><th width="22%">名称</th><th>风格</th></tr>
+  <tr><td>zh-CN-XiaoyiNeural</td><td>晓伊（当前默认）</td><td>活泼元气、少女感</td></tr>
+  <tr><td>zh-CN-XiaoxiaoNeural</td><td>晓晓</td><td>温柔知性、甜美</td></tr>
+  <tr><td>zh-CN-XiaohanNeural</td><td>晓涵</td><td>清亮温柔</td></tr>
+  <tr><td>zh-CN-XiaomengNeural</td><td>晓梦</td><td>软萌可爱、甜度最高</td></tr>
+  <tr><td>zh-CN-XiaomoNeural</td><td>晓墨</td><td>成熟温柔</td></tr>
+  <tr><td>zh-CN-XiaoruiNeural</td><td>晓睿</td><td>知性沉稳</td></tr>
+</table>
+
+<h3>6.2 切换步骤</h3>
+<p>1. 用记事本打开配置文件：<code>D:\Project\xiaozhi-esp32-server-main\main\xiaozhi-server\data\.config.yaml</code></p>
+<p>2. 找到 TTS 配置段，将 <code>voice:</code> 后面的音色 ID 换成目标音色：</p>
+<div class="box"><p><code>EdgeTTS:</code><br><code>&nbsp;&nbsp;type: edge</code><br><code>&nbsp;&nbsp;voice: zh-CN-XiaomengNeural&nbsp;&nbsp;# ← 改成想要的女声音色</code></p></div>
+<p>3. 保存文件，<b>重启服务器</b>（关闭 start.bat 窗口后重新双击 start.bat）即可生效。</p>
+<p class="tip">💡 也可以直接找维护人员（Claude）帮你改，改完自动重启生效。</p>
+
+<h2>七、常见问题（FAQ）</h2>
+<h3>Q1：页面打不开 / 无法连接</h3>
+<p>请确认 start.bat 的两个黑色窗口在运行（一个服务器、一个唤醒词）。页面地址必须是 <code>http://127.0.0.1:8006/index.html</code>，不能用文件方式双击打开。</p>
+<h3>Q2：嘉嘉不说话 / 没有声音</h3>
+<p>① 检查电脑音量与扬声器；② 检查浏览器麦克风权限（地址栏小图标 → 允许麦克风）；③ 确认已经点击"呼叫嘉嘉"且状态为"已连接"。</p>
+<h3>Q3：喊"嘉嘉"没反应</h3>
+<p>① 唤醒词服务是否启动（start.bat 的第二个窗口）；② 检查系统麦克风默认设备是否可用；③ 设置 → 唤醒词中确认"启用本地唤醒词"为启用；④ 尽量用普通话清晰喊"嘉嘉"（两个音节，间隔自然）。</p>
+<h3>Q4：语音识别不准</h3>
+<p>① 靠近麦克风、减少环境噪音；② 保持普通话发音清晰；③ 识别模型（SenseVoice）为本地离线模型，识别效果与麦克风质量有关。</p>
+<h3>Q5：回答比较慢</h3>
+<p>对话走 DeepSeek 云端接口，网络稍慢时等待 1~3 秒属正常。确认梯子代理未干扰 DeepSeek 接口（api.deepseek.com）。</p>
+<h3>Q6：文字输入框不见了</h3>
+<p>输入框在连接成功后才会显示。若已连接仍不见，刷新页面后重新"呼叫嘉嘉"。</p>
+<h3>Q7：声音卡顿 / 断断续续</h3>
+<p>① 关闭占用麦克风的其他程序；② 检查 WiFi/网络稳定性（TTS 需联网合成）；③ 重启服务器。</p>
+
+<h2>八、故障排查与日志</h2>
+<table>
+  <tr><th width="30%">服务</th><th>日志位置</th></tr>
+  <tr><td>嘉嘉服务器</td><td><code>D:\Project\xiaozhi-esp32-server-main\main\xiaozhi-server\tmp\server.log</code></td></tr>
+  <tr><td>唤醒词服务</td><td><code>D:\Project\xiaozhi-ui\wakeword_runtime\logs\wakeword-runtime.log</code></td></tr>
+</table>
+<p>排查顺序建议：唤醒词日志 → 服务器日志 → 浏览器控制台（F12）。若问题无法解决，请保留日志找维护人员处理。</p>
+
+<h2>九、技术信息附录</h2>
+<table>
+  <tr><th width="30%">项目</th><th>信息</th></tr>
+  <tr><td>服务架构</td><td>小智AI 服务器（Python）+ 网页客户端 + 唤醒词运行时（Python）</td></tr>
+  <tr><td>对话模型</td><td>DeepSeek（deepseek-chat），OpenAI 兼容接口</td></tr>
+  <tr><td>语音识别</td><td>sherpa-onnx + SenseVoice（本地离线，模型约 228MB）</td></tr>
+  <tr><td>语音合成</td><td>edge-tts（微软在线女声音色，需联网）</td></tr>
+  <tr><td>唤醒词</td><td>sherpa-onnx KWS（3.3M 模型，本地检测）</td></tr>
+  <tr><td>3D 虚拟体</td><td>Three.js 程序化钢铁侠机甲</td></tr>
+  <tr><td>端口</td><td>8000（WebSocket）· 8003（OTA）· 8006（唤醒词+网页）</td></tr>
+  <tr><td>数据目录</td><td>服务器配置 <code>data\.config.yaml</code>；UI 目录 <code>D:\Project\xiaozhi-ui</code></td></tr>
+  <tr><td>版本信息</td><td>小智服务器 v0.9.6 · 网页 UI 定制版 · 2026-08-13</td></tr>
+</table>
+
+<p class="center" style="margin-top:24pt;color:#b8939f;">—— 嘉嘉 AI 语音助手 · 使用说明文档 ——</p>
+<p class="center" style="color:#b8939f;">生成日期：2026-08-13</p>
+
+</body>
+</html>

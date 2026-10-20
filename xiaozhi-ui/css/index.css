@@ -1,0 +1,796 @@
+/* ===== 嘉嘉 · 粉色女友风主题 ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    font-family: "Microsoft YaHei UI", "PingFang SC", "Segoe UI", "Cascadia Code", sans-serif;
+    color: #5c4a52;
+    overflow: hidden;
+}
+
+body {
+    background: linear-gradient(160deg, #fff0f5 0%, #ffe4ec 40%, #ffd6e0 100%);
+}
+
+/* ===== 背景 ===== */
+.background-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -2;
+    background: linear-gradient(160deg, #fff0f5 0%, #ffe4ec 40%, #ffd6e0 100%);
+    background-size: cover;
+    background-position: center;
+    transition: background-image 0.5s ease;
+}
+
+.background-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 240, 245, 0.55);
+}
+
+/* 漂浮爱心 */
+.floating-hearts {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.floating-hearts span {
+    position: absolute;
+    bottom: -40px;
+    font-size: 22px;
+    opacity: 0.5;
+    animation: floatUp linear infinite;
+}
+
+.floating-hearts span:nth-child(1) { left: 8%;  animation-duration: 14s; animation-delay: 0s; }
+.floating-hearts span:nth-child(2) { left: 28%; animation-duration: 18s; animation-delay: 3s; font-size: 16px; }
+.floating-hearts span:nth-child(3) { left: 52%; animation-duration: 16s; animation-delay: 6s; font-size: 26px; }
+.floating-hearts span:nth-child(4) { left: 74%; animation-duration: 20s; animation-delay: 2s; font-size: 18px; }
+.floating-hearts span:nth-child(5) { left: 90%; animation-duration: 15s; animation-delay: 8s; }
+
+@keyframes floatUp {
+    0%   { transform: translateY(0) rotate(0deg); opacity: 0; }
+    10%  { opacity: 0.5; }
+    100% { transform: translateY(-110vh) rotate(25deg); opacity: 0; }
+}
+
+/* ===== 主容器 ===== */
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 14px 18px 16px;
+}
+
+/* ===== 顶部嘉嘉信息栏 ===== */
+.header-bar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 18px;
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(10px);
+    border-radius: 22px;
+    box-shadow: 0 4px 18px rgba(255, 107, 157, 0.18);
+    border: 1px solid rgba(255, 182, 208, 0.5);
+}
+
+.avatar-circle {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff9ebb 0%, #ff6b9d 100%);
+    color: #fff;
+    font-size: 26px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 14px rgba(255, 107, 157, 0.45);
+    animation: avatarPulse 3s ease-in-out infinite;
+}
+
+@keyframes avatarPulse {
+    0%, 100% { box-shadow: 0 4px 14px rgba(255, 107, 157, 0.45); }
+    50%      { box-shadow: 0 4px 22px rgba(255, 107, 157, 0.75); }
+}
+
+.header-info {
+    flex: 1;
+}
+
+.jijia-name {
+    font-size: 20px;
+    font-weight: bold;
+    color: #d6457e;
+    letter-spacing: 1px;
+}
+
+.name-heart {
+    font-size: 14px;
+}
+
+.jijia-tagline {
+    font-size: 12px;
+    color: #b8939f;
+    margin-top: 2px;
+}
+
+/* 连接状态 */
+.connection-status-top {
+    display: flex;
+    align-items: center;
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: #b8939f;
+    background: rgba(255, 240, 245, 0.8);
+    padding: 6px 12px;
+    border-radius: 999px;
+}
+
+.status-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    display: inline-block;
+    transition: all 0.3s;
+}
+
+.status-disconnected {
+    background: #d4b8c0;
+}
+
+.status-connected {
+    background: #4cd97b;
+    box-shadow: 0 0 8px rgba(76, 217, 123, 0.8);
+}
+
+/* ===== 主体双栏：钢铁侠 + 聊天 ===== */
+.main-area {
+    flex: 1;
+    display: flex;
+    gap: 14px;
+    margin-top: 14px;
+    min-height: 0;
+}
+
+/* 嘉嘉形象面板（照片相框） */
+.jiajia-panel {
+    width: 320px;
+    flex-shrink: 0;
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(8px);
+    border-radius: 22px;
+    border: 1px solid rgba(255, 182, 208, 0.45);
+    box-shadow: 0 4px 20px rgba(255, 107, 157, 0.12);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.jiajia-panel h3 {
+    text-align: center;
+    padding: 10px 0 4px;
+    font-size: 14px;
+    color: #d6457e;
+    letter-spacing: 1px;
+}
+
+.jiajia-panel h3 small {
+    display: block;
+    font-size: 11px;
+    color: #b8939f;
+    font-weight: normal;
+    margin-top: 2px;
+}
+
+/* 相框本体 */
+.jiajia-photo-frame {
+    flex: 1;
+    min-height: 0;
+    position: relative;
+    margin: 6px 14px 0;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #ffe4ec;
+    border: 3px solid rgba(255, 182, 208, 0.9);
+    box-shadow: 0 6px 20px rgba(255, 107, 157, 0.25);
+    transition: border-color 0.35s ease;
+}
+
+/* 轮播舞台：内容由 media-carousel.js 动态放进来的 img / video */
+#jiajiaMediaStage {
+    position: absolute;
+    inset: 0;
+    transition: transform 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+    will-change: transform;
+}
+
+#jiajiaMediaStage img,
+#jiajiaMediaStage video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    background: #2a1a20;
+}
+
+/* 嘉嘉说话时相框发光脉冲 */
+.jiajia-photo-frame.speaking {
+    border-color: #ff8ab5;
+    animation: jiajiaGlow 1.1s ease-in-out infinite;
+}
+
+@keyframes jiajiaGlow {
+    0%, 100% { box-shadow: 0 6px 20px rgba(255, 107, 157, 0.25); }
+    50%      { box-shadow: 0 6px 30px rgba(255, 107, 157, 0.70), 0 0 26px rgba(255, 107, 157, 0.50); }
+}
+
+.jiajia-status {
+    text-align: center;
+    padding: 8px 0 12px;
+    font-size: 12px;
+    color: #b8939f;
+}
+
+.jiajia-status .core-state {
+    color: #d6457e;
+    font-weight: 500;
+}
+
+/* 聊天区 */
+.chat-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(8px);
+    border-radius: 22px;
+    border: 1px solid rgba(255, 182, 208, 0.45);
+    box-shadow: 0 4px 20px rgba(255, 107, 157, 0.12);
+    overflow: hidden;
+}
+
+.chat-stream {
+    flex: 1;
+    overflow-y: auto;
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    scroll-behavior: smooth;
+}
+
+.chat-stream::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chat-stream::-webkit-scrollbar-thumb {
+    background: #ffc1d5;
+    border-radius: 3px;
+}
+
+/* 消息气泡 */
+.chat-message {
+    display: flex;
+    max-width: 80%;
+    animation: msgIn 0.3s ease;
+}
+
+@keyframes msgIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.chat-message.user {
+    align-self: flex-end;
+}
+
+.chat-message.ai {
+    align-self: flex-start;
+}
+
+.message-bubble {
+    padding: 11px 16px;
+    font-size: 14.5px;
+    line-height: 1.6;
+    border-radius: 18px;
+    word-break: break-word;
+    white-space: pre-wrap;
+}
+
+.chat-message.user .message-bubble {
+    background: linear-gradient(135deg, #ff9ebb, #ff6b9d);
+    color: #fff;
+    border-bottom-right-radius: 6px;
+    box-shadow: 0 3px 10px rgba(255, 107, 157, 0.35);
+}
+
+.chat-message.ai .message-bubble {
+    background: #fff;
+    color: #5c4a52;
+    border: 1px solid #ffd0e0;
+    border-bottom-left-radius: 6px;
+    box-shadow: 0 3px 10px rgba(214, 69, 126, 0.08);
+}
+
+/* 音频可视化 */
+.visualizer-wrap {
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 14px;
+}
+
+#audioVisualizer {
+    width: 100%;
+    height: 30px;
+    opacity: 0.75;
+}
+
+/* 文字输入 */
+.chat-ipt {
+    display: none;
+    padding: 10px 14px 14px;
+}
+
+.chat-ipt input {
+    width: 100%;
+    padding: 12px 18px;
+    border: 1.5px solid #ffc1d5;
+    border-radius: 999px;
+    background: #fff;
+    color: #5c4a52;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.chat-ipt input:focus {
+    border-color: #ff6b9d;
+    box-shadow: 0 0 0 3px rgba(255, 107, 157, 0.15);
+}
+
+.chat-ipt input::placeholder {
+    color: #d4a8b5;
+}
+
+/* ===== 底部控制栏 ===== */
+.control-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 22px;
+    margin-top: 14px;
+    padding: 10px 0;
+}
+
+.control-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    border: none;
+    cursor: pointer;
+    background: #fff;
+    color: #d6457e;
+    border-radius: 18px;
+    padding: 10px 18px;
+    min-width: 92px;
+    box-shadow: 0 4px 14px rgba(255, 107, 157, 0.18);
+    transition: all 0.2s;
+    font-size: 12.5px;
+}
+
+.control-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(255, 107, 157, 0.3);
+}
+
+.control-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-icon {
+    width: 24px;
+    height: 24px;
+}
+
+.control-btn-soft {
+    background: rgba(255, 255, 255, 0.9);
+}
+
+/* 主按钮：呼叫/挂断 */
+.control-btn.dial-btn {
+    background: linear-gradient(135deg, #ff9ebb, #ff6b9d);
+    color: #fff;
+    min-width: 110px;
+    padding: 12px 20px;
+    border-radius: 22px;
+    box-shadow: 0 6px 20px rgba(255, 107, 157, 0.45);
+}
+
+.control-btn.dial-btn:hover {
+    box-shadow: 0 8px 26px rgba(255, 107, 157, 0.6);
+}
+
+.control-btn.dial-btn.dial-active {
+    background: linear-gradient(135deg, #8ee6b0, #4cd97b);
+    box-shadow: 0 6px 20px rgba(76, 217, 123, 0.4);
+}
+
+/* 录音按钮 */
+.control-btn.record-btn.recording {
+    background: linear-gradient(135deg, #ff7b98, #ff4d7d);
+    color: #fff;
+    animation: recordPulse 1.2s ease-in-out infinite;
+}
+
+@keyframes recordPulse {
+    0%, 100% { box-shadow: 0 6px 20px rgba(255, 77, 125, 0.4); }
+    50%      { box-shadow: 0 6px 28px rgba(255, 77, 125, 0.7); }
+}
+
+/* ===== 设置弹窗 ===== */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: rgba(90, 40, 60, 0.4);
+    backdrop-filter: blur(4px);
+}
+
+.modal.show {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: #fff;
+    border-radius: 22px;
+    width: min(520px, 92vw);
+    max-height: 86vh;
+    overflow: hidden;
+    box-shadow: 0 16px 60px rgba(214, 69, 126, 0.3);
+    border: 1px solid #ffd0e0;
+    animation: modalIn 0.25s ease;
+}
+
+@keyframes modalIn {
+    from { opacity: 0; transform: scale(0.94) translateY(12px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 22px;
+    border-bottom: 1px solid #ffe4ec;
+}
+
+.modal-header h2 {
+    font-size: 17px;
+    color: #d6457e;
+}
+
+.close-btn {
+    border: none;
+    background: #ffe4ec;
+    color: #d6457e;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.close-btn:hover {
+    background: #ffc1d5;
+    transform: rotate(90deg);
+}
+
+.modal-body {
+    padding: 18px 22px 22px;
+    max-height: calc(86vh - 70px);
+    overflow-y: auto;
+}
+
+/* 标签页 */
+.settings-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.tab-btn {
+    border: none;
+    background: #fff0f5;
+    color: #b8939f;
+    padding: 8px 16px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.2s;
+}
+
+.tab-btn.active {
+    background: linear-gradient(135deg, #ff9ebb, #ff6b9d);
+    color: #fff;
+    box-shadow: 0 3px 10px rgba(255, 107, 157, 0.35);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* 配置面板 */
+.config-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.config-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.config-item label {
+    font-size: 12.5px;
+    color: #b8939f;
+}
+
+.config-item input,
+.config-item select,
+.config-item textarea,
+.input-group input {
+    padding: 9px 13px;
+    border: 1.5px solid #ffd0e0;
+    border-radius: 12px;
+    font-size: 13.5px;
+    color: #5c4a52;
+    background: #fffafc;
+    outline: none;
+    transition: border-color 0.2s;
+    font-family: inherit;
+}
+
+.config-item input:focus,
+.config-item select:focus,
+.config-item textarea:focus,
+.input-group input:focus {
+    border-color: #ff6b9d;
+}
+
+.config-item textarea {
+    min-height: 84px;
+    resize: vertical;
+}
+
+.model-select {
+    cursor: pointer;
+}
+
+.connection-controls {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px dashed #ffd0e0;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 11px;
+}
+
+.input-group label {
+    font-size: 12.5px;
+    color: #b8939f;
+}
+
+.input-group input[disabled] {
+    background: #f5ecf0;
+    color: #b8939f;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 14px;
+}
+
+.btn-primary {
+    border: none;
+    background: linear-gradient(135deg, #ff9ebb, #ff6b9d);
+    color: #fff;
+    padding: 10px 24px;
+    border-radius: 999px;
+    font-size: 13.5px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(255, 107, 157, 0.35);
+    transition: all 0.2s;
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(255, 107, 157, 0.5);
+}
+
+/* 其他设置 */
+.other-settings-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.background-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1.5px solid #ffd0e0;
+    background: #fffafc;
+    color: #d6457e;
+    padding: 10px 18px;
+    border-radius: 14px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.2s;
+}
+
+.background-btn:hover {
+    border-color: #ff6b9d;
+    background: #fff0f5;
+}
+
+/* ===== 摄像头预览浮层 ===== */
+.camera-container {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    /* 4:3，和摄像头实际输出一致 —— 否则预览和拍出来的构图对不上 */
+    width: 240px;
+    height: 180px;
+    background: rgba(255, 240, 245, 0.6);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    border: 3px solid rgba(255, 182, 208, 0.9);
+    box-shadow: 0 6px 22px rgba(255, 107, 157, 0.35);
+    z-index: 1000;
+    display: none;
+    overflow: hidden;
+    cursor: move;
+}
+
+.camera-container.active { display: block; }
+
+.camera-container.dragging {
+    cursor: grabbing;
+    box-shadow: 0 10px 32px rgba(255, 107, 157, 0.55);
+    border-color: #ff8ab5;
+}
+
+/* 前后摄切换的翻转动画（保留拖拽位移，见 app.js 写入的 --original-transform） */
+@keyframes flipWithPosition {
+    0%   { transform: var(--original-transform) rotateY(0deg); }
+    100% { transform: var(--original-transform) rotateY(180deg); }
+}
+
+.camera-container.flip {
+    animation: flipWithPosition 0.5s ease-in-out 1 forwards;
+}
+
+#cameraVideo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background: #2a1a20;
+    pointer-events: none;
+    transform: scaleX(-1); /* 前置摄像头镜像，switchCamera 会改内联样式覆盖 */
+}
+
+.camera-switch-mask {
+    position: absolute;
+    inset: 0;
+    cursor: pointer;
+}
+
+.camera-switch-container {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
+.camera-switch {
+    display: none;
+    height: 20px;
+    color: #fff;
+    filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.6));
+}
+
+.camera-switch .btn-icon { margin-bottom: 0; }
+
+.camera-switch.active { display: block; }
+
+/* 摄像头按钮开启态 */
+.control-btn.camera-btn.camera-active {
+    background: linear-gradient(135deg, #ff7b98, #ff4d7d);
+    color: #fff;
+    box-shadow: 0 6px 20px rgba(255, 77, 125, 0.45);
+}
+
+/* 模型加载遮罩 */
+.model-loading {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 240, 245, 0.85);
+    z-index: 2000;
+}
+
+.model-loading .loading-text {
+    font-size: 16px;
+    color: #d6457e;
+    letter-spacing: 3px;
+}
+
+/* Opus 音频库状态（成功后自动隐藏，留作故障时的可视诊断） */
+.script-status {
+    position: fixed;
+    right: 12px;
+    bottom: 8px;
+    font-size: 11px;
+    color: #c9a6b2;
+    pointer-events: none;
+    z-index: 5;
+}
+
+/* 移动端适配 */
+@media (max-width: 860px) {
+    .main-area { flex-direction: column; }
+    .jiajia-panel { width: 100%; height: 240px; }
+    /* 窄屏相框变矮变宽，用 object-position 把脸留在可视区 */
+    .jiajia-photo-frame { margin: 6px 10px 0; }
+    .container { padding: 8px 10px 10px; }
+    .control-btn { min-width: 76px; padding: 8px 12px; }
+    .control-btn.dial-btn { min-width: 92px; }
+    .chat-message { max-width: 88%; }
+    .camera-container { width: 160px; height: 120px; bottom: 14px; left: 14px; }
+}

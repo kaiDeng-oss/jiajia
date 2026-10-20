@@ -1,0 +1,206 @@
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+<meta charset="utf-8">
+<title>嘉嘉盒子 · 产品化部署手册</title>
+<!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View><w:Zoom>100</w:Zoom></w:WordDocument></xml><![endif]-->
+<style>
+  @page { size: 595.3pt 841.9pt; margin: 72pt 90pt; }
+  body { font-family: "微软雅黑", "Microsoft YaHei", sans-serif; font-size: 11pt; color: #333333; line-height: 1.7; }
+  h1 { font-size: 22pt; color: #d6457e; text-align: center; margin: 18pt 0 6pt 0; }
+  h2 { font-size: 15pt; color: #d6457e; border-bottom: 1.5pt solid #ffc1d5; padding-bottom: 4pt; margin: 18pt 0 8pt 0; }
+  h3 { font-size: 12.5pt; color: #c0396b; margin: 12pt 0 6pt 0; }
+  p { margin: 6pt 0; }
+  table { border-collapse: collapse; width: 100%; margin: 8pt 0; }
+  th { background: #ffe4ec; color: #b0386a; font-weight: bold; }
+  th, td { border: 0.75pt solid #dda8bd; padding: 6pt 8pt; font-size: 10.5pt; }
+  .center { text-align: center; }
+  .subtitle { text-align: center; color: #b8939f; font-size: 11pt; margin-bottom: 24pt; }
+  .box { background: #fff8fa; border: 0.75pt solid #ffc1d5; padding: 8pt 12pt; margin: 8pt 0; }
+  code { font-family: Consolas, "Courier New", monospace; background: #fff0f5; color: #c0396b; padding: 1pt 4pt; font-size: 10pt; }
+  .tip { color: #2e7d32; }
+  .warn { color: #c62828; }
+  ol, ul { margin: 6pt 0 6pt 20pt; }
+  li { margin: 3pt 0; }
+</style>
+</head>
+<body>
+
+<h1>嘉嘉盒子 · 产品化部署手册</h1>
+<p class="subtitle">ESP32 语音助手硬件产品 · 从零到可交付 · 2026-08-14</p>
+
+<h2>一、产品形态与架构</h2>
+<p><b>嘉嘉盒子</b>是一台桌面语音助手硬件：用户插电、连 WiFi 后，喊"嘉嘉"即可对话。所有智能（对话、音色）都在云端服务器，盒子本身只负责"听、传、说"。</p>
+<table>
+  <tr><th width="20%">环节</th><th>设备</th><th>职责</th></tr>
+  <tr><td>语音采集</td><td>ESP32-S3 + INMP441 麦克风</td><td>收音 + 本地唤醒词检测（离线）</td></tr>
+  <tr><td>数据传输</td><td>ESP32 WiFi</td><td>Opus 压缩音频 ↔ 云服务器（WebSocket）</td></tr>
+  <tr><td>对话大脑</td><td>云服务器（小智服务器）</td><td>ASR 识别 → DeepSeek 对话 → 湾湾小何 TTS</td></tr>
+  <tr><td>语音播放</td><td>MAX98357A + 喇叭</td><td>播放服务器返回的语音</td></tr>
+</table>
+<div class="box">
+<p class="center">📦 产品 = 硬件盒子（一次性成本）+ 云服务器（月租）+ API 按量费（运营成本）</p>
+</div>
+
+<h2>二、硬件清单（单台成本约 60-100 元）</h2>
+<table>
+  <tr><th width="26%">部件</th><th width="34%">推荐型号</th><th>参考价格</th></tr>
+  <tr><td>主控开发板</td><td>ESP32-S3-DevKitC-1（8MB PSRAM 版，如合宙 ESP32-S3 开发板）</td><td>30-50 元</td></tr>
+  <tr><td>麦克风</td><td>INMP441（I2S 数字麦克风，板上自带）</td><td>8-15 元</td></tr>
+  <tr><td>功放模块</td><td>MAX98357A（I2S 功放，3W）</td><td>8-12 元</td></tr>
+  <tr><td>扬声器</td><td>3W 8Ω 小喇叭（40mm）</td><td>5-10 元</td></tr>
+  <tr><td>电源</td><td>Type-C 5V/2A 充电头 + 数据线</td><td>10-20 元</td></tr>
+  <tr><td>外壳（可选）</td><td>3D 打印 / 亚克力盒子</td><td>10-30 元</td></tr>
+</table>
+<p class="tip">💡 也可直接购买现成"小智AI 开发板"（部分商家已集成麦克风+喇叭+外壳，约 60-100 元），省去自己焊接接线。</p>
+
+<h2>三、硬件接线</h2>
+<table>
+  <tr><th width="30%">INMP441 麦克风</th><th width="30%">MAX98357A 功放</th><th>ESP32-S3 引脚</th></tr>
+  <tr><td>VDD</td><td>VIN</td><td>3.3V</td></tr>
+  <tr><td>GND</td><td>GND</td><td>GND</td></tr>
+  <tr><td>SD</td><td>—</td><td>GND（使能）</td></tr>
+  <tr><td>SCK（BCLK）</td><td>BCLK</td><td>GPIO 4</td></tr>
+  <tr><td>WS（LRCLK）</td><td>LRC</td><td>GPIO 5</td></tr>
+  <tr><td>SD（DOUT）</td><td>—</td><td>GPIO 6</td></tr>
+  <tr><td>—</td><td>DIN</td><td>GPIO 15</td></tr>
+  <tr><td>—</td><td>—</td><td>喇叭接 SPK+ / SPK-</td></tr>
+</table>
+<p class="warn">⚠️ 引脚分配以固件配置为准（menuconfig 中可改），上表为常见默认值。不同开发板丝印可能不同，务必对照原理图。</p>
+
+<h2>四、软件开发环境（固件编译）</h2>
+<h3>4.1 安装 ESP-IDF（乐鑫官方工具链）</h3>
+<ol>
+  <li>下载安装 <b>ESP-IDF 离线安装器</b>（Windows 版）：https://dl.espressif.com/dl/esp-idf/（选择 ESP-IDF v5.x 稳定版）</li>
+  <li>安装完成后，打开 <code>ESP-IDF CMD</code> 命令行工具</li>
+  <li>验证：运行 <code>idf.py --version</code>，显示版本号即成功</li>
+</ol>
+
+<h3>4.2 获取固件源码</h3>
+<div class="box">
+<p><code>git clone https://github.com/78/xiaozhi-esp32.git</code></p>
+<p><code>cd xiaozhi-esp32</code></p>
+<p>（若 GitHub 慢，可用国内镜像或下载 zip 包）</p>
+</div>
+
+<h3>4.3 配置固件（核心步骤）</h3>
+<p>运行 <code>idf.py menuconfig</code>，进入配置界面，重点设置：</p>
+<table>
+  <tr><th width="34%">配置项</th><th>填写内容</th></tr>
+  <tr><td>WiFi 配置</td><td>开启 SoftAP 配网（默认支持）</td></tr>
+  <tr><td>WebSocket 服务器地址</td><td><code>ws://你的域名:8000/xiaozhi/v1/</code>（或 IP）</td></tr>
+  <tr><td>设备 ID / MAC</td><td>每台盒子唯一编号（如 JJ-0001）</td></tr>
+  <tr><td>设备 Token</td><td>服务器分配的认证令牌（开启认证时必填）</td></tr>
+  <tr><td>唤醒词</td><td>选择/配置"嘉嘉"（见第五章）</td></tr>
+  <tr><td>采样率</td><td>16000 Hz（与服务器一致）</td></tr>
+</table>
+
+<h3>4.4 编译与烧录</h3>
+<div class="box">
+<p><code>idf.py build</code>　　（首次编译约 10-20 分钟）</p>
+<p><code>idf.py -p COM3 flash monitor</code>　　（烧录并查看日志，COM3 换成实际串口号）</p>
+</div>
+
+<h2>五、唤醒词"嘉嘉"（关键环节）</h2>
+<p>ESP32 的唤醒词基于乐鑫 <b>ESP-SR（WakeNet）</b> 离线语音唤醒技术：</p>
+<ul>
+  <li><b>预置唤醒词</b>：固件默认自带"小智""你好小智"等词（无需训练，直接可用）</li>
+  <li><b>自定义唤醒词"嘉嘉"</b>：需要训练模型。乐鑫提供训练工具：
+    <ul>
+      <li>在线训练服务：乐鑫官网 WakeNet 训练页（上传音频样本，训练"嘉嘉"模型，约数小时出结果）</li>
+      <li>或使用 ESP-SR 官方训练流程（基于 esp-sr 仓库的 model 训练工具链）</li>
+    </ul>
+  </li>
+  <li>训练完成后，将生成的唤醒词模型文件放入固件，menuconfig 中指定</li>
+  <li>社区已有"小智"等双音节词训练教程，可直接参考（B 站/CSDN 搜"xiaozhi esp32 自定义唤醒词"）</li>
+</ul>
+<p class="tip">💡 双音节词（嘉嘉）识别率高、误唤醒少，是最理想的唤醒词长度。</p>
+
+<h2>六、云服务器部署（产品的心脏）</h2>
+<h3>6.1 购买云服务器</h3>
+<table>
+  <tr><th width="24%">项目</th><th>建议</th></tr>
+  <tr><td>服务商</td><td>阿里云 / 腾讯云 / 华为云 轻量应用服务器</td></tr>
+  <tr><td>配置</td><td>2 核 2G 起（50 台设备内足够），4G 更稳</td></tr>
+  <tr><td>系统</td><td>Ubuntu 22.04 LTS（推荐）</td></tr>
+  <tr><td>带宽</td><td>5Mbps 起（语音流量小，足够）</td></tr>
+  <tr><td>费用</td><td>约 30-60 元/月（新用户常有 1-3 个月免费试用）</td></tr>
+</table>
+<h3>6.2 部署小智服务器</h3>
+<p><b>方案 A：Docker（推荐，最省心）</b></p>
+<div class="box">
+<p>1. 服务器安装 Docker：<code>curl -fsSL https://get.docker.com | sh</code></p>
+<p>2. 克隆服务器源码：<code>git clone https://github.com/xinnan-tech/xiaozhi-esp32-server.git</code></p>
+<p>3. 按官方 <code>docker-setup.sh</code> 一键部署（自动下载依赖与模型）</p>
+<p>4. 修改配置 <code>data/.config.yaml</code>（DeepSeek Key、湾湾小何、嘉嘉人设——与你本机相同，直接拷贝即可）</p>
+</div>
+<p><b>方案 B：源码部署（与你本机一致）</b></p>
+<div class="box">
+<p>Python 3.10 + pip 安装 requirements.txt + 拷贝 <code>data/.config.yaml</code> + 运行 <code>python app.py</code></p>
+</div>
+<h3>6.3 开放端口</h3>
+<table>
+  <tr><th>端口</th><th>用途</th><th>是否对外开放</th></tr>
+  <tr><td>8000</td><td>WebSocket（设备语音通道）</td><td>是（安全组放行）</td></tr>
+  <tr><td>8003</td><td>OTA / HTTP</td><td>是（设备配网需要）</td></tr>
+  <tr><td>8006</td><td>网页客户端（可选）</td><td>可选（做成 App/网页版时用）</td></tr>
+</table>
+
+<h2>七、设备认证（防白嫖，必做）</h2>
+<p>服务器 <code>data/.config.yaml</code> 中开启设备认证：</p>
+<div class="box">
+<p><code>auth:</code></p>
+<p><code>&nbsp;&nbsp;enabled: true</code></p>
+<p><code>&nbsp;&nbsp;allowed_devices:</code>　　（白名单设备直接放行）</p>
+<p><code>&nbsp;&nbsp;&nbsp;&nbsp;- "JJ-0001"</code></p>
+<p><code>&nbsp;&nbsp;&nbsp;&nbsp;- "JJ-0002"</code></p>
+</div>
+<p>每卖一台盒子：① 固件烧录唯一设备 ID ② 服务器白名单登记该 ID。未登记的盒子无法连接，别人无法蹭你的 API 额度。</p>
+
+<h2>八、买家使用流程（交付体验）</h2>
+<ol>
+  <li>开箱，插上 Type-C 电源（盒子指示灯亮）</li>
+  <li>手机搜索 WiFi"xiaozhi-xxxx"热点，连接</li>
+  <li>浏览器打开 192.168.4.1，输入家里 WiFi 密码 → 盒子自动配网</li>
+  <li>配网完成，盒子自动连接你的云服务器</li>
+  <li>喊"嘉嘉" → 对话开始（体验与小爱音箱一致）</li>
+</ol>
+<p class="tip">💡 配网页面可定制品牌化（放你的 Logo、使用说明、公众号二维码）。</p>
+
+<h2>九、成本与定价建议</h2>
+<table>
+  <tr><th>项目</th><th>成本</th><th>说明</th></tr>
+  <tr><td>硬件（单台）</td><td>60-100 元</td><td>含开发板/麦克风/功放/喇叭/外壳</td></tr>
+  <tr><td>云服务器</td><td>30-60 元/月</td><td>可带 50 台左右设备</td></tr>
+  <tr><td>DeepSeek API</td><td>按量</td><td>每台设备每月约几元（日常聊天）</td></tr>
+  <tr><td>火山 TTS（湾湾小何）</td><td>按量</td><td>免费额度后用后付费，量小价低</td></tr>
+</table>
+<p><b>定价建议</b>：盒子卖 <b>199-299 元</b>（硬件+一年服务），次年服务费 <b>50-99 元/年</b>（覆盖 API 成本+服务器）。或纯硬件 + 按月订阅。</p>
+
+<h2>十、常见问题</h2>
+<h3>Q1：一台服务器能带多少台盒子？</h3>
+<p>2核2G 约 50 台（语音交互是间歇性的）；更多设备升级 4G/8G 配置即可，服务器程序本身支持多设备并发。</p>
+<h3>Q2：盒子说话要钱吗？</h3>
+<p>唤醒词检测在盒子本地（免费），对话/合成走云端 API（你的成本）。所以控制成本的关键是设备数量 × 使用频率。</p>
+<h3>Q3：WiFi 环境变化怎么办？</h3>
+<p>盒子支持重新配网（长按按键进入配网模式），或使用 SoftAP 重置。</p>
+<h3>Q4：想做 App 控制/远程查看？</h3>
+<p>小智有配套管理后台（manager-web）和手机 App（xiaozhi-android-client），可做设备管理、远程查看聊天记录。</p>
+<h3>Q5：合规需要注意什么？</h3>
+<p>面向公众提供 AI 对话服务需注意《生成式人工智能服务管理暂行办法》：做正式商用前建议咨询律师/做备案评估，个人小圈子使用不受影响。</p>
+
+<h2>十一、下一步行动清单</h2>
+<table>
+  <tr><th width="8%">序号</th><th width="40%">事项</th><th>优先级</th></tr>
+  <tr><td>1</td><td>购买 ESP32-S3 开发板 + INMP441 + MAX98357A 练手</td><td>立即</td></tr>
+  <tr><td>2</td><td>搭 ESP-IDF 环境，编译官方固件，连接现有本地服务器验证</td><td>第一步</td></tr>
+  <tr><td>3</td><td>训练"嘉嘉"唤醒词</td><td>第二步</td></tr>
+  <tr><td>4</td><td>购买云服务器，Docker 部署小智服务器（拷贝本机配置）</td><td>第二步</td></tr>
+  <tr><td>5</td><td>开启设备认证，烧录固件绑定设备 ID</td><td>第三步</td></tr>
+  <tr><td>6</td><td>设计外壳、包装、配网页品牌化</td><td>第三步</td></tr>
+</table>
+
+<p class="center" style="margin-top:24pt;color:#b8939f;">—— 嘉嘉盒子 · 产品化部署手册 ——</p>
+<p class="center" style="color:#b8939f;">生成日期：2026-08-14 ｜ 基于小智AI（xiaozhi-esp32 / xiaozhi-esp32-server）开源项目</p>
+
+</body>
+</html>

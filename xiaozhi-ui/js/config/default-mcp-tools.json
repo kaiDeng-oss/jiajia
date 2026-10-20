@@ -1,0 +1,155 @@
+[
+    {
+        "name": "self_camera_take_photo",
+        "description": "Take a photo using the device's camera. This tool captures the current camera frame and returns the image data. You MUST call this tool when user asks to 'take a photo', 'what do you see', 'describe what you see', or similar requests. After getting the photo data, describe what you see in the image. IMPORTANT: this only works while the camera is already open — if it returns an error saying the camera is not ready, call self_camera_open first and then take the photo. Chinese triggers include: '拍张照', '看看我', '你看到什么', '我在干嘛'. Parameter 'question' is optional, defaults to 'describe objects seen'.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "question": {
+                    "type": "string",
+                    "description": "Question to guide the photo analysis, e.g., 'describe the objects seen'. Can be empty."
+                }
+            }
+        },
+        "mockResponse": {
+            "success": true,
+            "photo_data": "base64_image_data",
+            "response": "Please describe what you see based on the returned photo_data"
+        }
+    },
+    {
+        "name": "self_camera_snapshot",
+        "description": "Take a photo AND save it to the user's local photo folder (D:\\Project\\照片). You MUST call this tool when the user explicitly asks you to take / snap a photo, e.g. '拍张照', '帮我拍一张', '给我拍照', '拍下来', '拍照', 'snap a photo'. This is different from self_camera_take_photo: take_photo only looks at the scene to answer a question, while this one SAVES the picture to disk. Requires the camera to be open — if it errors saying the camera is not ready, call self_camera_open first. Parameter 'question' is optional.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "question": {
+                    "type": "string",
+                    "description": "Optional question to guide the analysis of the shot."
+                }
+            }
+        },
+        "mockResponse": {
+            "success": true,
+            "message": "照片已保存"
+        }
+    },
+    {
+        "name": "self_camera_open",
+        "description": "Open the device camera so you can actually see the user. You MUST call this tool whenever the user asks you to open / turn on / start the camera, or asks whether you can see them. Chinese triggers include: '开启相机', '打开相机', '开摄像头', '打开摄像头', '看看我', '你能看到我吗', '你看得到我吗', '帮我看看'. IMPORTANT: opening the camera does NOT start automatic watching — the camera merely turns on and you stay quiet. If the user only wants one look right now, call self_camera_take_photo. If the user wants you to keep watching and speak up when something changes, you MUST additionally call self_camera_start_watching. Never claim the camera is on without calling this tool first.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {}
+        },
+        "mockResponse": {
+            "success": true,
+            "message": "相机已开启，你现在能看到阿凯了；但你不会自动看，要阿凯另外说「开始实时观看」你才会持续帮他看着"
+        }
+    },
+    {
+        "name": "self_camera_start_watching",
+        "description": "Start continuous watching: from now on you will periodically receive visual observations of what the camera sees, and you should naturally speak up when something new or noteworthy appears. You MUST call this tool when the user asks you to keep watching, watch continuously or keep an eye on things. Chinese triggers include: '开始实时观看', '实时观看', '帮我盯着', '帮我看着', '一直看着', '持续看着', '随时看着', '帮我留意'. This tool also opens the camera by itself if it is not open yet, so you do not need to call self_camera_open first. Do NOT call this unless the user explicitly asks for continuous watching — merely opening the camera does not enable it. Stop it with self_camera_stop_watching.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {}
+        },
+        "mockResponse": {
+            "success": true,
+            "message": "好，我开始帮你看着啦，有新东西就跟你说"
+        }
+    },
+    {
+        "name": "self_camera_stop_watching",
+        "description": "Stop continuous watching so you no longer receive periodic visual observations and stop commenting on the scene on your own. The camera itself stays ON. Call this only when the user explicitly asks you to stop the continuous watching while keeping the camera on. Chinese triggers include: '停止实时观看', '停止持续观看', '不用一直看着', '别再自动看了', '不用主动说'. NOTE: if the user wants the camera itself turned off, use self_camera_close instead — that also stops the watching.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {}
+        },
+        "mockResponse": {
+            "success": true,
+            "message": "好，我不自动看啦"
+        }
+    },
+    {
+        "name": "self_camera_close",
+        "description": "Close the device camera. You MUST call this tool whenever the user asks you to close / turn off / stop the camera. Chinese triggers include: '关掉相机', '关闭相机', '关摄像头', '关掉摄像头', '别看了', '不要看了', '把相机收起来'.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {}
+        },
+        "mockResponse": {
+            "success": true,
+            "message": "相机已关闭"
+        }
+    },
+    {
+        "name": "self.get_device_status",
+        "description": "Provides the real-time information of the device, including the current status of the audio speaker, screen, battery, network, etc.\nUse this tool for: \n1. Answering questions about current condition (e.g. what is the current volume of the audio speaker?)\n2. As the first step to control the device (e.g. turn up / down the volume of the audio speaker, etc.)",
+        "inputSchema": {
+            "type": "object",
+            "properties": {}
+        },
+        "mockResponse": {
+            "audio_speaker": {
+                "volume": 50,
+                "muted": false
+            },
+            "screen": {
+                "brightness": 80,
+                "theme": "light"
+            },
+            "battery": {
+                "level": 85,
+                "charging": false
+            },
+            "network": {
+                "connected": true,
+                "type": "wifi"
+            }
+        }
+    },
+    {
+        "name": "self.audio_speaker.set_volume",
+        "description": "Set the volume of the audio speaker. If the current volume is unknown, you must call `self.get_device_status` tool first and then call this tool.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "volume": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 100
+                }
+            },
+            "required": [
+                "volume"
+            ]
+        },
+        "mockResponse": {
+            "success": true,
+            "volume": "${volume}",
+            "message": "音量已设置为 ${volume}"
+        }
+    },
+    {
+        "name": "self.screen.set_brightness",
+        "description": "Set the brightness of the screen.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "brightness": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 100
+                }
+            },
+            "required": [
+                "brightness"
+            ]
+        },
+        "mockResponse": {
+            "success": true,
+            "brightness": "${brightness}",
+            "message": "亮度已设置为 ${brightness}"
+        }
+    }
+]
